@@ -2,14 +2,15 @@ import { FC } from 'react';
 import { iDriver } from '../utils/interfaces';
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
+
 import './DriverCard.css'
 interface Props {
   driver: iDriver
+  overtake: (id:number)=> void
 }
 
-const DriverCard: FC<Props> = ({ driver }) => {
-  const { firstname, lastname, country, team, place, imgUrl } = driver
+const DriverCard: FC<Props> = ({ driver, overtake }) => {
+  const { id, firstname, lastname, country, team, place = 1, imgUrl } = driver
   const flagUri = "https://countryflagsapi.com/png/" + country
 
   return (
@@ -19,7 +20,7 @@ const DriverCard: FC<Props> = ({ driver }) => {
       >  
       <div className='container'>
         <div>#{place}</div>
-        <div className="cardImg"> <img src={imgUrl} /> </div>
+        <div className="cardImg"> <img src={imgUrl} alt={country}/> </div>
         <div className='flagContainer'> 
           <img className='flag' src={flagUri} alt={country} />
           <br/>
@@ -28,7 +29,9 @@ const DriverCard: FC<Props> = ({ driver }) => {
         <div className='title'> {firstname} {lastname} </div>
         <div className='text'> {team}</div>
         <div>
-          <Button className="driverCardButton" variant="primary">Place Overtake</Button>
+          {place > 1 &&
+            <Button className="driverCardButton" variant="primary" onClick={() => overtake(id)}>Overtake</Button>
+          }
         </div>
       </div>   
     </ListGroup.Item>

@@ -1,26 +1,29 @@
-import { shuffle } from "../utils";
+import { initDrivers, sortDrivers } from "../utils";
 import { Request, Response } from "express";
-import { iDriver } from "../interfaces";
 
 const router = require('express').Router();
-const drivers = require('../drivers.json')
+const drivers = initDrivers()
 
 router.get('/drivers', (req:Request, res: Response) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Request-Headers', '*');
     res.header('Content-Type', 'application/json');
+
+    res.send(drivers)
+});
+router.post('/drivers/:id/overtake', (req:Request, res: Response) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Request-Headers', '*');
+    res.header('Content-Type', 'application/json');
     
-    const places:number[] = []
-    for (let i = 0; i < drivers.length; i++) {
-        places.push(i + 1)
+    const DriverId:number = parseInt(req.params.id)
+    const ind = drivers.findIndex(driver => driver.id === DriverId)
+    if (ind > 0){
+        drivers[ind].place = (drivers[ind].place || 0) - 1;
+        drivers[ind - 1].place = (drivers[ind].place || 0) + 1;
     }
-    const randomPlaces = shuffle(places)
     
-    res.send(drivers.map((d:iDriver, i:number) => ({
-        ...d,
-        imgUrl: `/images/${d.code.toLowerCase()}.png`,
-        place: randomPlaces[i]
-    })).sort((a:iDriver, b: iDriver) => (a?.place || 0) - (b?.place || 0)))
+    res.send(drivers.sort(sortDrivers))
 });
 
 
