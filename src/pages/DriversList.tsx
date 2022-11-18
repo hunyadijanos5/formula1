@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { iDriver } from '../utils/interfaces';
 import DriverCard from './DriverCard';
+import ListGroup from 'react-bootstrap/ListGroup';
 
 import './DriversList.css'
 
@@ -21,7 +22,9 @@ const DriversList: FC = () => {
 
   return (
     <div className='driverCards'>
-      {drivers?.map((driver:iDriver) => <DriverCard driver={driver}/>)}
+      <ListGroup as="ol">
+        {drivers?.map((driver:iDriver) => <DriverCard driver={driver}/>)}
+      </ListGroup>
     </div>
   );
 }
