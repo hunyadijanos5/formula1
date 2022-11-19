@@ -11,7 +11,7 @@ const DriversList: FC = () => {
 
   useEffect(() => {
     if (drivers === null) {
-      axios.get("http://localhost:9997/api/drivers")
+      axios.get("http://localhost:80/api/drivers")
         .then(res => {
             setDrivers(res?.data)
             console.log("Drivers Data loaded")
@@ -22,7 +22,7 @@ const DriversList: FC = () => {
 
   const overtake = (id: number, move?: number) => {
     console.log("moved", move)
-    axios.post(`http://localhost:9997/api/drivers/${id}/overtake`, { move })
+    axios.post(`http://localhost:80/api/drivers/${id}/overtake`, { move })
     .then(res => setDrivers(res?.data))
     .catch((e)=> console.error(e))
   }
