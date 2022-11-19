@@ -4,7 +4,7 @@ import api from "./routes/api"
 
 const app: express.Express = express();
 const bodyParser = require('body-parser');
-const port = process.env.PORT || '9997';
+const port = process.env.PORT || '80';
 
 
 const createApplication = (app: express.Express) => {
@@ -20,8 +20,8 @@ const createApplication = (app: express.Express) => {
     
     app.use('/api', api);
 
-    app.use(express.static(path.join(__dirname, '../build')));
-    app.get('/*', (req: express.Request, res: express.Response) => res.sendFile(path.join(__dirname, '../build', 'index.html')));
+    app.use(express.static(path.join(__dirname, '../')));
+    app.get('/*', (req: express.Request, res: express.Response) => res.sendFile(path.join(__dirname, '../', 'index.html')));
 
     app.listen(port, () => console.log(`Express server listening at http://localhost:${port}`));
 };

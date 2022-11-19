@@ -32,8 +32,8 @@
   "scripts": {
     "start": "yarn && concurrently --kill-others-on-fail \"env-cmd -f .env nodemon ./server/index.ts\" \"yarn client\"",
     "client": "react-scripts start",
-    "server": "env-cmd -f .env nodemon server",
-    "build": "react-scripts build",
+    "build": "docker build -t formula1 .",
+    "serve": "docker run -d -p 80:80 formula1",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

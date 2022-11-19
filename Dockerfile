@@ -16,7 +16,8 @@ RUN yarn install
 COPY . .
 RUN yarn build
 RUN tsc ./server/index.ts --outDir ./build/server
+RUN cp ./server/drivers.json ./build/server/drivers.json
 
 CMD ["node", "./build/server/index.js"]
 
-EXPOSE 9997:80
+EXPOSE 80

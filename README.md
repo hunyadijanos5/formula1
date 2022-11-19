@@ -31,6 +31,10 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+## `yarn serve`
+
+This command will run the docker file and serve the project on `http://localhost/`
+
 ## Project created with create-react-app
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
