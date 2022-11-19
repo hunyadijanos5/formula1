@@ -1,5 +1,11 @@
 This is a test typescript project with React frontend and express backend.
 
+First run:
+- Desktop: Start Docker Desktop
+- CMD: yarn build
+- CMD: yarn serve
+- Desktop: open browser -> http://localhost (and it is running on port 80)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

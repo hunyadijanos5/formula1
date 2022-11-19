@@ -14,7 +14,7 @@ COPY src /app/src
 COPY server /app/server
 RUN yarn install
 COPY . .
-RUN yarn build
+RUN yarn react-build
 RUN tsc ./server/index.ts --outDir ./build/server
 RUN cp ./server/drivers.json ./build/server/drivers.json
 
