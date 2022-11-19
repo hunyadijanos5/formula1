@@ -9,6 +9,9 @@ img {
 }
 .flag {
   max-width: 50px;
+  box-shadow: 0.1rem 0.1rem 0.1rem 0.1rem #888888;
+  border: 1rem;
+  border-radius: 50%;
 }
 .flagContainer {
   text-align: center;

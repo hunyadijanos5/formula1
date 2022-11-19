@@ -6,11 +6,11 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import './DriverCard.css'
 interface Props {
   driver: iDriver
-  overtake: (id:number)=> void
+  overtake: (id:number, move:number)=> void
 }
 
 const DriverCard: FC<Props> = ({ driver, overtake }) => {
-  const { id, firstname, lastname, country, team, place = 1, imgUrl } = driver
+  const { id, firstname, lastname, country, team, code, place = 1, imgUrl } = driver
   const flagUri = "https://countryflagsapi.com/png/" + country
 
   return (
@@ -19,19 +19,19 @@ const DriverCard: FC<Props> = ({ driver, overtake }) => {
         className="d-flex justify-content-between align-items-start"
       >  
       <div className='container'>
-        <div>#{place}</div>
+        <div>#{place} - ({code})</div>
         <div className="cardImg"> <img src={imgUrl} alt={country}/> </div>
         <div className='flagContainer'> 
           <img className='flag' src={flagUri} alt={country} />
           <br/>
           <span>({country})</span>
         </div>
-        <div className='title'> {firstname} {lastname} </div>
+        <div className='title'> {firstname} {lastname}</div>
         <div className='text'> {team}</div>
         <div>
-          {place > 1 &&
-            <Button className="driverCardButton" variant="primary" onClick={() => overtake(id)}>Overtake</Button>
-          }
+            {place > 1 && 
+              <Button className="driverCardButton" variant="primary" onClick={() => overtake(id, -1)}>Overtake</Button>
+            }
         </div>
       </div>   
     </ListGroup.Item>

@@ -1,7 +1,8 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { iDriver } from '../utils/interfaces';
 import DriverCard from './DriverCard';
 import ListGroup from 'react-bootstrap/ListGroup';
+import axios from 'axios'
 
 import './DriversList.css'
 
@@ -10,38 +11,65 @@ const DriversList: FC = () => {
 
   useEffect(() => {
     if (drivers === null) {
-      fetch("http://localhost:9997/api/drivers")
-        .then(res => res.json())
-        .then(d => {
-            setDrivers(d)
+      axios.get("http://localhost:9997/api/drivers")
+        .then(res => {
+            setDrivers(res?.data)
             console.log("Drivers Data loaded")
           })
         .catch(()=> console.log("cannot fetch drivers data first load"))
     }
   }, [drivers])
 
-  const overtake = (id: number) => {
-    fetch(`http://localhost:9997/api/drivers/${id}/overtake`, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Access-Control-Request-Headers': '*',
-        'Access-Control-Allow-Origin': "*",
-      },
-      mode: "no-cors"
-    })
-    .then(res => res.text())
-    .then(json => {
-      const newDrivers = JSON.parse(json)
-      setDrivers(newDrivers)
-    })
+  const overtake = (id: number, move?: number) => {
+    console.log("moved", move)
+    axios.post(`http://localhost:9997/api/drivers/${id}/overtake`, { move })
+    .then(res => setDrivers(res?.data))
     .catch((e)=> console.error(e))
   }
+
+  //save reference for dragItem and dragOverItem
+	const dragItem = useRef<any>(null)
+	const dragOverItem = useRef<any>(null)
+
+	//const handle drag sorting
+	const handleSort = () => {
+    // skip sort if no item in the list or nothing change
+		if (!drivers || dragOverItem.current === dragItem.current) return
+
+    //duplicate items
+		let _driverItems = [...drivers]
+    
+		//remove and save the dragged item content
+		const draggedItemContent = _driverItems.splice(dragItem.current, 1)[0]
+    
+		//switch the position
+		_driverItems.splice(dragOverItem.current, 0, draggedItemContent)
+    
+    overtake(
+      drivers[dragItem.current].id, 
+      dragOverItem.current - dragItem.current
+    )
+
+		//reset the position ref
+		dragItem.current = null
+		dragOverItem.current = null
+	}
 
   return (
     <div className='driverCards'>
       <ListGroup as="ol">
-        {drivers?.map((driver:iDriver, i:number) => <DriverCard key={i} driver={driver} overtake={overtake} />)}
+        {drivers?.map((driver:iDriver, i:number) => 
+          <div
+            key={i}
+            draggable
+            onDragStart={(e) => (dragItem.current = i)}
+            onDragEnter={(e) => (dragOverItem.current = i)}
+            onDragEnd={handleSort}
+            onDragOver={(e) => e.preventDefault()}
+          >
+            <DriverCard driver={driver} overtake={overtake} />
+          </div>
+        )}
       </ListGroup>
     </div>
   );

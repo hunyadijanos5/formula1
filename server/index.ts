@@ -3,12 +3,21 @@ import express, {Express, Request, Response} from 'express';
 import api from "./routes/api"
 
 const app: Express = express();
+const bodyParser = require('body-parser');
 const port = process.env.PORT || '9997';
 
 
 const createApplication = (app: Express) => {
-    console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(express.json());
 
+    app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH');
+        res.header("Access-Control-Allow-Headers", "x-access-token, Origin, X-Requested-With, Content-Type, Accept");
+        next();
+    });
+    
     app.use('/api', api);
 
     app.use(express.static(path.join(__dirname, '../build')));
